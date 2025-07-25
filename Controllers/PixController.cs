@@ -27,8 +27,14 @@ namespace TesteWebhooks.Controllers
                 Horario = pagamento.horario
             };
 
-            // 📝 Caminho do arquivo de log
-            var caminhoLog = Path.Combine(Directory.GetCurrentDirectory(), "log_pix.txt");
+            // 📝 Caminho para pasta Log dentro de Model
+            var pastaLog = Path.Combine(Directory.GetCurrentDirectory(), "Model", "Log");
+
+            // 🔒 Certifica que a pasta existe (cria se não existir)
+            Directory.CreateDirectory(pastaLog);
+
+            // 🗂️ Caminho completo do arquivo de log
+            var caminhoLog = Path.Combine(pastaLog, "log_pix.txt");
 
             // 🧾 Conteúdo a ser gravado
             var log = $@"
@@ -42,6 +48,7 @@ Horário: {pagamento.horario}
 
             // ✏️ Grava no arquivo (append)
             System.IO.File.AppendAllText(caminhoLog, log + Environment.NewLine);
+
 
             return Ok(resposta);
         }
