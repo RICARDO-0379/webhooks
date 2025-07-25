@@ -10,8 +10,22 @@ namespace TesteWebhooks.Controllers
         [HttpPost]
         public IActionResult ReceberPix([FromBody] PixNotificacao notificacao)
         {
-            // Aqui você pode adicionar log, salvar em banco, etc.
-            return Ok("Webhook recebido com sucesso!");
+            var pagamento = notificacao.pix?.FirstOrDefault();
+
+            if (pagamento == null)
+                return BadRequest("Nenhuma transação Pix encontrada.");
+
+            var resposta = new
+            {
+                Mensagem = "Pagamento Pix recebido com sucesso!",
+                Valor = pagamento.valor,
+                Chave = pagamento.chave,
+                Txid = pagamento.txid,
+                EndToEndId = pagamento.endToEndId,
+                Horario = pagamento.horario
+            };
+
+            return Ok(resposta);
         }
     }
 }
